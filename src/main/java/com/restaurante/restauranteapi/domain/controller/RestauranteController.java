@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.restaurante.restauranteapi.domain.model.dto.RestauranteDTO;
+import com.restaurante.restauranteapi.domain.exception.NaoEncontradoException;
+import com.restaurante.restauranteapi.domain.service.IRestauranteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,12 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.restaurante.restauranteapi.domain.model.Restaurante;
-import com.restaurante.restauranteapi.domain.repository.RestauranteRepository;
-import com.restaurante.restauranteapi.domain.service.CadastraRestauranteService;
 
 import lombok.AllArgsConstructor;
 
@@ -26,46 +27,55 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
-	
-	private RestauranteRepository restauranteRepository;
-	private CadastraRestauranteService cadastraRestauranteService;
-	
+
+	@Autowired
+	private IRestauranteService restauranteService;
+
 	@GetMapping
-	public List<Restaurante> listar() {
-		return restauranteRepository.findAll();
+	public List<Restaurante> listarRestaurantes() {
+		return restauranteService.listarRestaurantes();
 	}
 	
-	@GetMapping("/{restId}")
-	public ResponseEntity<Restaurante> buscar(@PathVariable Long restId) {
-		return restauranteRepository.findById(restId).map(ResponseEntity :: ok).orElse(ResponseEntity.notFound().build());
+	@GetMapping("/{id}")
+	public ResponseEntity<?> buscarRestaurante(@PathVariable Long id) {
+		try {
+			return ResponseEntity.ok(restauranteService.buscarRestaurante(id));
+		} catch (NaoEncontradoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 	
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante adicionar(@Valid @RequestBody Restaurante restaurante) {
-		return cadastraRestauranteService.salvar(restaurante);
+	public ResponseEntity<?> adicionarRestaurante(@Valid @RequestBody RestauranteDTO restauranteDTO) {
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(restauranteService.incluirRestaurante(restauranteDTO));
+		} catch (NaoEncontradoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 		
 	}
 	
 	
-	@PutMapping("/{restId}")
-	public ResponseEntity<Restaurante> atualizar(@PathVariable Long restId, @Valid @RequestBody Restaurante restaurante) {
-		if (!restauranteRepository.existsById(restId)) {
-			return ResponseEntity.notFound().build();
+	@PutMapping("/{id}")
+	public ResponseEntity<?> atualizarRestaurante(@PathVariable Long id, @Valid @RequestBody RestauranteDTO restauranteDTO) {
+		try {
+			return ResponseEntity.ok(restauranteService.alterarRestaurante(id, restauranteDTO));
+		} catch (NaoEncontradoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-		restaurante.setId(restId);
-		cadastraRestauranteService.salvar(restaurante);
-		return ResponseEntity.ok(restaurante);
 	}
 	
-	@DeleteMapping("/{restId}")
-	public ResponseEntity<Void> excluir(@PathVariable Long restId) {
-		if (!restauranteRepository.existsById(restId)) {
-			return ResponseEntity.notFound().build();
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> excluirRestaurante(@PathVariable Long id) {
+		try {
+			restauranteService.excluirRestaurante(id);
+		} catch (NaoEncontradoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-		cadastraRestauranteService.excluir(restId);
+
 		return ResponseEntity.noContent().build();
 	}
 	
