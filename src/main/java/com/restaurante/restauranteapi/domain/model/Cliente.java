@@ -5,25 +5,19 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
-@Setter
+@Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cliente {
 	
 	
 	@Id
-	@EqualsAndHashCode.Include
 	private Long cpf;
 	
 	@NotBlank

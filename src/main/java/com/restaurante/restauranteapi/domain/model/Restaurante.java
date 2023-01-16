@@ -8,18 +8,19 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Restaurante {
 
 	@Id
-	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private long id;
 	
 	@NotBlank
 	@Size(max = 255)

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.restaurante.restauranteapi.domain.model.Cargo;
 
 @Repository
-public interface CargoRepository extends JpaRepository<Cargo, String> {
+public interface CargoRepository extends JpaRepository<Cargo, Long> {
 
 }

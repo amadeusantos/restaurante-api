@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.restaurante.restauranteapi.domain.exception.NaoEncontradoException;
+import com.restaurante.restauranteapi.domain.model.dto.CargoDTO;
+import com.restaurante.restauranteapi.domain.service.ICargoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,12 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.restaurante.restauranteapi.domain.model.Cargo;
-import com.restaurante.restauranteapi.domain.repository.CargoRepository;
-import com.restaurante.restauranteapi.domain.service.CadastraCargoService;
 
 import lombok.AllArgsConstructor;
 
@@ -27,47 +28,51 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/cargos")
 public class CargoController {
 
-	private CadastraCargoService cadastraCargoService;
-	private CargoRepository cargoRepository;
+	@Autowired
+	private ICargoService cargoService;
 	
 	@GetMapping
-	public List<Cargo> listar() {
-		return cargoRepository.findAll();
+	public List<Cargo> listarCargos() {
+		return cargoService.listarCargos();
 	}
 	
-	@GetMapping("/{cargoId}")
-	public ResponseEntity<Cargo> buscar(@PathVariable String cargoId) {
-		return cargoRepository.findById(cargoId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	@GetMapping("/{id}")
+	public ResponseEntity<?> buscarCargo(@PathVariable long id) {
+		try {
+			return ResponseEntity.ok(cargoService.buscarCargo(id));
+		} catch (NaoEncontradoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Cargo> adicionar(@Valid @RequestBody Cargo cargo) {
-		if (cargoRepository.existsById(cargo.getId())) {
-			return ResponseEntity.notFound().build();
+	public ResponseEntity<?> incluirCargo(@Valid @RequestBody CargoDTO cargoDTO) {
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(cargoService.incluirCargo(cargoDTO));
+		} catch (NaoEncontradoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-		cadastraCargoService.salvar(cargo);
-		return ResponseEntity.ok(cargo);
 	}
 	
-	@PutMapping("/{cargoId}")
-	public ResponseEntity<Cargo> atualizar(@PathVariable String cargoId,@Valid @RequestBody Cargo cargo) {
-		if (!cargoRepository.existsById(cargoId)) {
-			return ResponseEntity.notFound().build();
+	@PutMapping("/{id}")
+	public ResponseEntity<?> alterarCargo(@PathVariable long id, @Valid @RequestBody CargoDTO cargoDTO) {
+		try {
+			return ResponseEntity.ok(cargoService.alterarCargo(id, cargoDTO));
+		} catch (NaoEncontradoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-		cargo.setId(cargoId);
-		cadastraCargoService.salvar(cargo);
-		return ResponseEntity.ok(cargo);
 	}
 	
-	@DeleteMapping("/{cargoId}")
-	public ResponseEntity<Void> remover(@PathVariable String cargoId){
-		if (!cargoRepository.existsById(cargoId)) {
-			return ResponseEntity.notFound().build();
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> excluirCargo(@PathVariable long id){
+		try {
+			cargoService.excluirCargo(id);
+		} catch (NaoEncontradoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-		cadastraCargoService.excluir(cargoId);
+
 		return ResponseEntity.noContent().build();
 	}
-	
-	
+
 }

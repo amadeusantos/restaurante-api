@@ -1,32 +1,26 @@
 package com.restaurante.restauranteapi.domain.model;
 
-import java.util.List;
+import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
+@Data
 @Entity
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cargo {
 	
 	@Id
-	@EqualsAndHashCode.Include
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+
+	private String nome;
 	
 	private float salario;
 	
 	@Column(name = "carga_horaria")
-	private int carga;
-	
+	private int cargaHoraria;
 
 }

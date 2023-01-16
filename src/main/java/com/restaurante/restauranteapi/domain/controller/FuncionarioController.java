@@ -50,7 +50,7 @@ public class FuncionarioController {
 			return ResponseEntity.notFound().build();
 		}
 		funcionario.setRestaurante(restauranteRepository.findById(restId).orElse(null));
-		funcionario.setCargo(cargoRepository.findById(cargoId).orElse(null));
+//		funcionario.setCargo(cargoRepository.findById(cargoId).orElse(null));
 		funcionarioService.salvar(funcionario);
 		return ResponseEntity.ok(funcionario);
 	}

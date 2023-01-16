@@ -37,7 +37,7 @@ public class RestauranteController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarRestaurante(@PathVariable Long id) {
+	public ResponseEntity<?> buscarRestaurante(@PathVariable long id) {
 		try {
 			return ResponseEntity.ok(restauranteService.buscarRestaurante(id));
 		} catch (NaoEncontradoException e) {
@@ -60,7 +60,7 @@ public class RestauranteController {
 	
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizarRestaurante(@PathVariable Long id, @Valid @RequestBody RestauranteDTO restauranteDTO) {
+	public ResponseEntity<?> atualizarRestaurante(@PathVariable long id, @Valid @RequestBody RestauranteDTO restauranteDTO) {
 		try {
 			return ResponseEntity.ok(restauranteService.alterarRestaurante(id, restauranteDTO));
 		} catch (NaoEncontradoException e) {
@@ -69,7 +69,7 @@ public class RestauranteController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> excluirRestaurante(@PathVariable Long id) {
+	public ResponseEntity<?> excluirRestaurante(@PathVariable long id) {
 		try {
 			restauranteService.excluirRestaurante(id);
 		} catch (NaoEncontradoException e) {
