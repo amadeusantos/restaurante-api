@@ -23,7 +23,7 @@ public class RestauranteService implements IRestauranteService {
     }
 
     @Override
-    public Restaurante buscarRestaurante(Long id) throws NaoEncontradoException {
+    public Restaurante buscarRestaurante(long id) throws NaoEncontradoException {
         Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
 
         if (restauranteOptional.isEmpty()) {
@@ -39,7 +39,7 @@ public class RestauranteService implements IRestauranteService {
     }
 
     @Override
-    public Restaurante alterarRestaurante(Long id, RestauranteDTO restauranteDTO) throws NaoEncontradoException {
+    public Restaurante alterarRestaurante(long id, RestauranteDTO restauranteDTO) throws NaoEncontradoException {
 
         if (!restauranteRepository.existsById(id)) {
             throw new NaoEncontradoException("Restaurante não encontrado.");
@@ -52,7 +52,7 @@ public class RestauranteService implements IRestauranteService {
     }
 
     @Override
-    public void excluirRestaurante(Long id) throws NaoEncontradoException {
+    public void excluirRestaurante(long id) throws NaoEncontradoException {
 
         if (!restauranteRepository.existsById(id)) {
             throw new NaoEncontradoException("Restaurante não encontrado.");

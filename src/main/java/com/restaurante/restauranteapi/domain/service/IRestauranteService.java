@@ -10,11 +10,11 @@ public interface IRestauranteService {
 
     List<Restaurante> listarRestaurantes();
 
-    Restaurante buscarRestaurante(Long id) throws NaoEncontradoException;
+    Restaurante buscarRestaurante(long id) throws NaoEncontradoException;
 
     Restaurante incluirRestaurante(RestauranteDTO restauranteDTO) throws NaoEncontradoException;
 
-    Restaurante alterarRestaurante(Long id, RestauranteDTO restauranteDTO) throws NaoEncontradoException;
+    Restaurante alterarRestaurante(long id, RestauranteDTO restauranteDTO) throws NaoEncontradoException;
 
-    void excluirRestaurante(Long id) throws NaoEncontradoException;
+    void excluirRestaurante(long id) throws NaoEncontradoException;
 }

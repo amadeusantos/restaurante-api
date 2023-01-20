@@ -10,12 +10,12 @@ public interface ICargoService {
 
     List<Cargo> listarCargos();
 
-    Cargo buscarCargo(Long id) throws NaoEncontradoException;
+    Cargo buscarCargo(long id) throws NaoEncontradoException;
 
     Cargo incluirCargo(CargoDTO cargoDTO) throws NaoEncontradoException;
 
-    Cargo alterarCargo(Long id, CargoDTO cargoDTO) throws NaoEncontradoException;
+    Cargo alterarCargo(long id, CargoDTO cargoDTO) throws NaoEncontradoException;
 
-    void excluirCargo(Long id) throws NaoEncontradoException;
+    void excluirCargo(long id) throws NaoEncontradoException;
 
 }

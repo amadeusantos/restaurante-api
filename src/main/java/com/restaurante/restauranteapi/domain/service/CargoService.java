@@ -23,7 +23,7 @@ public class CargoService implements ICargoService {
     }
 
     @Override
-    public Cargo buscarCargo(Long id) throws NaoEncontradoException {
+    public Cargo buscarCargo(long id) throws NaoEncontradoException {
         Optional<Cargo> cargo = cargoRepository.findById(id);
 
         if (cargo.isEmpty()) {
@@ -39,7 +39,7 @@ public class CargoService implements ICargoService {
     }
 
     @Override
-    public Cargo alterarCargo(Long id, CargoDTO cargoDTO) throws NaoEncontradoException {
+    public Cargo alterarCargo(long id, CargoDTO cargoDTO) throws NaoEncontradoException {
 
         if (!cargoRepository.existsById(id)) {
             throw new NaoEncontradoException("Cargo não encontrado.");
@@ -52,7 +52,7 @@ public class CargoService implements ICargoService {
     }
 
     @Override
-    public void excluirCargo(Long id) throws NaoEncontradoException {
+    public void excluirCargo(long id) throws NaoEncontradoException {
 
         if (!cargoRepository.existsById(id)) {
             throw new NaoEncontradoException("Cargo não encontrado.");

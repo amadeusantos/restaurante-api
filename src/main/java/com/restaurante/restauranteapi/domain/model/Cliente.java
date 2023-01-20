@@ -1,9 +1,10 @@
 package com.restaurante.restauranteapi.domain.model;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -18,14 +19,14 @@ public class Cliente {
 	
 	
 	@Id
-	private Long cpf;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+
+	private String cpf;
 	
 	@NotBlank
-	@Size(max = 60)
 	private String nome;
-	
-	
-	
-	private LocalDateTime nascimento;
+
+	private LocalDate nascimento;
 	
 }
